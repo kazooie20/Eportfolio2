@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
+<title>Portfolio</title>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="{% url 'project_index' %}">Rayner's EPortfolio</a>
@@ -12,9 +12,13 @@
             <li class="nav-item active">
               <a class="nav-link" href="{% url 'project_index' %}">Home</a>
             </li>
+            <li>
+              <a class="nav-link" href="{% url 'project_resume' %}">Resume</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'blog_index' %}">Blog</a>
             </li>
+
           </ul>
         </div>
     </div>
