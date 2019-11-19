@@ -5,7 +5,8 @@ from projects.models import Project
 def project_index(request):
     projects = Project.objects.all()
     context = {"projects": projects}
-    return render(request, "project_index.html", context)
+    return render(request,"project_index.html",context)
+    
 
 
 def project_detail(request, pk):
@@ -17,3 +18,5 @@ def project_resume(request):
     project = Project.objects.all()
     context = {"project":project}
     return render(request,"project_resume.html", context)
+
+
