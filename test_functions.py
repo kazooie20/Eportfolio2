@@ -18,7 +18,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-
+"""
 #Test Case 1 | General | Verify Launching Eportfolio Site
 def test_launchSite():
     op = webdriver.ChromeOptions()
@@ -30,21 +30,20 @@ def test_launchSite():
 
 #Test Case 2 | General | Verify Launching Eportfolio Site with 'localhost:8000' input into web browser
 def test_launchSite2():
-    op = webdriver.ChromeOptions()
-    op.add_argument('headless')
-    driver = webdriver.Chrome(options=op)
+    #op = webdriver.ChromeOptions()
+    #op.add_argument('headless')
+    driver = webdriver.Chrome()
     results = driver.get('localhost:8000/')
-    assert results = driver.get()'localhost:8000/projects')
+    assert results == driver.get('localhost:8000/projects')
 
-#Test Case 3 | General | Verify launching Resume
+
+#Test Case 3 | General | Verify launching Resume and look for 'Experience keyword' in Resume
 def test_launchResume():
-    op = webdriver.ChromeOptions()
-    op.add_argument('headless')
-    driver = webdriver.Chrome(options=op)
+    driver = webdriver.Chrome()
     driver.get('localhost:8000/projects/resume')
-    myElement = driver.find_element_by_id("Experience") #Find Keywords in html script for 'Experience'
-    results = myElement
-    assert results == driver.find_element_by_id("Experience")
+    myElement = driver.find_element_by_xpath('//*[@id="Experience"]/b').text #Find Keywords in html script for 'Experience'
+    assert myElement == "Experience" 
+    driver.quit()
 
 #Test Case 4 | General | Verify if SelfIntro page launch
 def test_launchSelfIntro():
@@ -54,6 +53,7 @@ def test_launchSelfIntro():
     results = driver.get('localhost:8000/projects/resume')
     assert results == driver.get('localhost:8000/projects/resume')
 
+"""
 """
 #Test Case 5 | Homepage | Rendering of Homepage in Browser
 def test_RenderHomepage():
@@ -77,7 +77,7 @@ def test_RenderSpecProj():
 """
 
 #----------------------------------------------------------------------------------
-
+"""
 #Test Case 9 | Homepage | Test for read more button functionality
 def test_readMoreFunc():
     driver = webdriver.Chrome()
@@ -105,7 +105,7 @@ def test_viewBlog():
     results = driver.get('localhost:8000/blog')
     assert results == driver.get('localhost:8000/blog')
 
-"""
+
 #Test Case 12 | Blog | View full post, comments and form with valid pk
 def test_viewPostCom():
     results = blog_detail('localhost:8000/blog',1)
@@ -117,7 +117,7 @@ def test_viewPostComN():
     results = blog_detail('localhost:8000/blog',-1)
     assert results == 
 
-"""
+
 #Test Case 14 | Blog | View posts of specific category (Lorem Ipsum)
 def test_viewPost():
     #op = webdriver.ChromeOptions()
@@ -210,7 +210,7 @@ def test_nonAlphabetChar():
     driver.get('localhost:8000/blog/1')
     #Click Comment
     textName = '#$718/'
-    textComment = '🤑 😲 ☹️ 🙁 😖 😞 😟 😤 😢 😭 😦 😧 😨 😩 🤯 😬 😰 😱 🥵'
+    textComment = "🤑😲"
 
     Name = driver.find_element_by_xpath('//*[@id="id_author"]')
     Comment = driver.find_element_by_xpath('//*[@id="id_body"]')
@@ -248,7 +248,7 @@ def test_RenderAdmin():
     op.add_argument('headless')
     driver = webdriver.Chrome(options=op)  # Running the tests without opening the browser on the frontend
     results = driver.get('localhost:8000/admin')
-    assert results = driver.get('localhost:8000/admin')
+    assert results == driver.get('localhost:8000/admin')
 
 #Test Case 22 | Django Admin | Verify login functionality with valid username and pass
 def testLoginFunc():
@@ -274,7 +274,7 @@ def testLoginFunc():
 def test_loginEmptyFie():
     driver = webdriver.Chrome()
     driver.get('localhost:8000/admin')
-    Username = ''
+    Username = ""
     Password = ""
 
     user = driver.find_element_by_xpath('//*[@id="id_username"]')
@@ -288,7 +288,6 @@ def test_loginEmptyFie():
     login = driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
     assert login == driver.get('localhost:8000/admin')
     driver.quit()
-
 
 #Test Case 24 | Django Admin | Verify login with chinese characters
 def test_loginChineseChar():
@@ -306,7 +305,24 @@ def test_loginChineseChar():
     assert login == driver.get('localhost:8000/admin')
     driver.quit()
 
-#Test Case 25 | Django Admin | Verify login with Emoji
+
+#Test Case 25 | Django Admin | Verify login with Func with invalid username & pass
+def test_loginInvalid():
+    driver = webdriver.Chrome()
+    driver.get('localhost:8000/admin')
+    Username = 'hey12345'
+    Password = 'peekabo12345'
+    user = driver.find_element_by_xpath('//*[@id="id_username"]')
+    com = driver.find_element_by_xpath('//*[@id="id_password"]')
+    #Send text into input
+    user.send_keys(Username)
+    com.send_keys(Password)
+    #Click on Login button
+    login = driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
+    assert login == driver.get('localhost:8000/admin')
+    driver.quit()
+
+#Test Case 26 | Django Admin | Verify login with Emoji
 def test_loginEmoji():
     driver = webdriver.Chrome()
     driver.get('localhost:8000/admin')
@@ -337,15 +353,129 @@ def test_launchNewGroupFuncPage():
     driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
     addNewGrpBtn = driver.find_element_by_xpath('//*[@id="content-main"]/div[1]/table/tbody/tr[1]/td[1]/a').click()
     assert addNewGrpBtn == driver.get('localhost:8000/admin/auth/group/add/')
+    driver.quit()
+
 
 #Test Case 27 | Django Admin | Verify launching of add new User functionality Page
+def test_launchNewUserFuncPage():
+    driver = webdriver.Chrome()
+    driver.get('localhost:8000/admin')
+    Username = "rayne"
+    Password = "t0034426a" #Valid Account
+    user = driver.find_element_by_xpath('//*[@id="id_username"]')
+    com = driver.find_element_by_xpath('//*[@id="id_password"]')
+    #Send text into input
+    user.send_keys(Username)
+    com.send_keys(Password)
+    #Click on Login button
+    driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
+    addNewUserBtn = driver.find_element_by_xpath('//*[@id="content-main"]/div[1]/table/tbody/tr[2]/td[1]/a').click()
+    assert addNewUserBtn == driver.get('localhost:8000/admin/auth/user/add/')
+    driver.quit()
+
 #Test Case 28 | Django Admin | Verify Add new group
-#Test Case 29 | Django Admin | Verify Add new User
+def test_addNewGrp():
+    driver = webdriver.Chrome()
+    driver.get('localhost:8000/admin')
+    Username = "rayne"
+    Password = "t0034426a" #Valid Account
+    user = driver.find_element_by_xpath('//*[@id="id_username"]')
+    com = driver.find_element_by_xpath('//*[@id="id_password"]')
+    #Send text into input
+    user.send_keys(Username)
+    com.send_keys(Password)
+    #Click on Login button
+    driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
+    
+    driver.find_element_by_xpath('//*[@id="content-main"]/div[1]/table/tbody/tr[1]/td[1]/a').click()
+    #Input new Grp
+    driver.get("http://localhost:8000/admin/auth/group/add/")
+    nametxtBox = driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/fieldset/div[1]/div/input')
+    GrpName = "TestGroup1"
+    nametxtBox.send_keys(GrpName)
+    #Check all permissions
+    driver.find_element_by_xpath('//*[@id="id_permissions_add_all_link"]').click()
+    submit = driver.find_element_by_xpath('//*[@id="group_form"]/div/div/input[1]').click()
+    assert submit == driver.get("http://localhost:8000/admin/auth/group/") #Assert a post function
+    driver.quit()
+
+#Test Case 29 | Django Admin | Verify Add duplicate User
+def test_addDuplicateUser():
+    driver = webdriver.Chrome()
+    driver.get('localhost:8000/admin')
+    Username = "rayne"
+    Password = "t0034426a" #Account Exists
+    user = driver.find_element_by_xpath('//*[@id="id_username"]')
+    com = driver.find_element_by_xpath('//*[@id="id_password"]')
+    #Send text into input
+    user.send_keys(Username)
+    com.send_keys(Password)
+    #Click on Login button
+    driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
+    driver.find_element_by_xpath('//*[@id="content-main"]/div/table/tbody/tr[2]/td[1]/a').click()
+    driver.get('http://localhost:8000/admin/auth/user/add/')
+    #Input new User
+    txtBoxUsername = driver.find_element_by_xpath('//*[@id="id_username"]')
+    txtBoxPass = driver.find_element_by_xpath('//*[@id="id_password1"]')
+    txtBoxCfmPass = driver.find_element_by_xpath('//*[@id="id_password2"]')
+
+    #Send Input text 
+    txtBoxUsername.send_keys('rayne')
+    txtBoxPass.send_keys('t0034426a')
+    txtBoxCfmPass.send_keys('t0034426a')
+    
+    #Click Save
+    savebtn = driver.find_element_by_xpath('//*[@id="user_form"]/div/div/input[1]').click()
+    ErrorMsg = driver.find_element_by_xpath('//*[@id="user_form"]/div/fieldset/div[1]/ul/li').text
+    assert ErrorMsg == 'A user with that username already exists.'
+    driver.quit()
+
 #Test Case 30 | Django Admin | Verify Adding new user with Username & Without Password
-#Test Case 31 | Django Admin | Verify Adding new user with emoji username and emoji password
+def test_addNewUserWOpass():
+    driver = webdriver.Chrome()
+    driver.get('localhost:8000/admin')
+    Username = "rayne"
+    Password = "t0034426a" #Account Exists
+    user = driver.find_element_by_xpath('//*[@id="id_username"]')
+    com = driver.find_element_by_xpath('//*[@id="id_password"]')
+    #Send text into input
+    user.send_keys(Username)
+    com.send_keys(Password)
+    #Click on Login button
+    driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
+    driver.find_element_by_xpath('//*[@id="content-main"]/div/table/tbody/tr[2]/td[1]/a').click()
+    driver.get('http://localhost:8000/admin/auth/user/add/')
+    #Input new User
+    txtBoxUsername = driver.find_element_by_xpath('//*[@id="id_username"]')
+    txtBoxPass = driver.find_element_by_xpath('//*[@id="id_password1"]')
+    txtBoxCfmPass = driver.find_element_by_xpath('//*[@id="id_password2"]')
 
+    #Send Input text 
+    txtBoxUsername.send_keys('rayne')
+    txtBoxPass.send_keys('')
+    txtBoxCfmPass.send_keys('')
+    
+    #Click Save
+    savebtn = driver.find_element_by_xpath('//*[@id="user_form"]/div/div/input[1]').click()
+    ErrorMsg = driver.find_element_by_xpath('//*[@id="user_form"]/div/fieldset/div[2]/ul/li').text
+    assert ErrorMsg == 'This field is required.'
+    driver.quit()
+
+"""
 #Test Case 32 | Django Admin | View a list of Users
-
-
+def test_viewlistofUsersPage():
+    driver = webdriver.Chrome()
+    driver.get('localhost:8000/admin')
+    Username = "rayne"
+    Password = "t0034426a" #Account Exists
+    user = driver.find_element_by_xpath('//*[@id="id_username"]')
+    com = driver.find_element_by_xpath('//*[@id="id_password"]')
+    #Send text into input
+    user.send_keys(Username)
+    com.send_keys(Password)
+    #Click on Login button
+    driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
+    view = driver.find_element_by_xpath('//*[@id="content-main"]/div[1]/table/tbody/tr[2]/th/a').click()
+    assert view == driver.get('http://localhost:8000/admin/auth/user/')
 
 
