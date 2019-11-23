@@ -28,5 +28,5 @@ if defined _OLD_VIRTUAL_PATH (
 )
 
 set "PATH=%VIRTUAL_ENV%\Scripts;%PATH%"
-
+set DJANGO_SETTINGS_MODULE=personal_portfolio.settings
 :END

@@ -7,8 +7,8 @@
 
 from blog import *
 from projects import *
-#from projects.views import *
-from personal_portfolio import *
+
+
 import os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -17,8 +17,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
-"""
 #Test Case 1 | General | Verify Launching Eportfolio Site
 def test_launchSite():
     op = webdriver.ChromeOptions()
@@ -53,8 +51,7 @@ def test_launchSelfIntro():
     results = driver.get('localhost:8000/projects/resume')
     assert results == driver.get('localhost:8000/projects/resume')
 
-"""
-"""
+
 #Test Case 5 | Homepage | Rendering of Homepage in Browser
 def test_RenderHomepage():
     results = project_index('localhost:8000/projects')
@@ -63,21 +60,21 @@ def test_RenderHomepage():
 #Test Case 6 | Homepage | PK is 4
 def test_RenderDetail():
     results = project_detail('localhost:8000/projects',4)
-    assert results == 
+    assert results == "Portfolio"
 
 #Test Case 7 | Homepage | PK is 0
 def test_RenderDetail2():
     results = project_detail('localhost:8000/projects',0)
-    assert results == 
+    assert results == "Portfolio"
 
 #Test Case 8 | Homepage | Render specific project 
 def test_RenderSpecProj():
     results = project_detail('localhost:8000/projects',2)
-    assert results ==
-"""
+    assert results == "Portfolio"
+
 
 #----------------------------------------------------------------------------------
-"""
+
 #Test Case 9 | Homepage | Test for read more button functionality
 def test_readMoreFunc():
     driver = webdriver.Chrome()
@@ -95,6 +92,17 @@ def test_HeaderClick():
     driver.get('localhost:8000/blog')
     element = driver.find_element_by_xpath("/html/body/nav/div/a").click()
     assert element == driver.get('localhost:8000/projects')
+    driver.quit()
+
+def test_readmorebtnclciked5times():
+    driver = webdriver.Chrome()
+    driver.get('localhost:8000/projects')
+    i = 0
+    for i in range(5):
+        element = driver.find_element_by_xpath("/html/body/div/div/div[1]/div/div/a").click()
+        driver.get('localhost:8000/projects')
+
+    assert element == driver.get('localhost:8000/projects/1') #didnt crash if redirected to projects page
     driver.quit()
 
 #Test Case 11 | Blog | View all posts on blog
@@ -115,7 +123,7 @@ def test_viewPostCom():
 #Test Case 13 | Blog | View full post, comments and form with invalid pk
 def test_viewPostComN():
     results = blog_detail('localhost:8000/blog',-1)
-    assert results == 
+    assert results == "Portfolio"
 
 
 #Test Case 14 | Blog | View posts of specific category (Lorem Ipsum)
@@ -239,6 +247,22 @@ def test_validInput():
 
     
     submit = driver.find_element_by_xpath('/html/body/div/div/form/button').click()
+    assert submit == driver.get('localhost:8000/blog/1')#If submit is successful, page will reload, if not sucessful page will crash 
+    driver.quit()
+
+def test_submitBtnClickedTwice():
+    driver = webdriver.Chrome()
+    driver.get('localhost:8000/blog/1')
+    #Click Comment
+    textName = 'Felix'
+    textComment = 'Awesome hello'
+    Name = driver.find_element_by_xpath('//*[@id="id_author"]')
+    Comment = driver.find_element_by_xpath('//*[@id="id_body"]')
+    Name.send_keys(textName)
+    Comment.send_keys(textComment) #Enter text to input fields
+    i = 0
+    for i in range(2):
+        submit = driver.find_element_by_xpath('/html/body/div/div/form/button').click()
     assert submit == driver.get('localhost:8000/blog/1')#If submit is successful, page will reload, if not sucessful page will crash 
     driver.quit()
 
@@ -390,11 +414,9 @@ def test_addNewGrp():
     driver.find_element_by_xpath('//*[@id="content-main"]/div[1]/table/tbody/tr[1]/td[1]/a').click()
     #Input new Grp
     driver.get("http://localhost:8000/admin/auth/group/add/")
-    nametxtBox = driver.find_element_by_xpath('/html/body/div/div[3]/div/form/div/fieldset/div[1]/div/input')
-    GrpName = "TestGroup1"
+    nametxtBox = driver.find_element_by_xpath('//*[@id="id_name"]')
+    GrpName = "TestGroup3"
     nametxtBox.send_keys(GrpName)
-    #Check all permissions
-    driver.find_element_by_xpath('//*[@id="id_permissions_add_all_link"]').click()
     submit = driver.find_element_by_xpath('//*[@id="group_form"]/div/div/input[1]').click()
     assert submit == driver.get("http://localhost:8000/admin/auth/group/") #Assert a post function
     driver.quit()
@@ -461,7 +483,7 @@ def test_addNewUserWOpass():
     assert ErrorMsg == 'This field is required.'
     driver.quit()
 
-"""
+
 #Test Case 32 | Django Admin | View a list of Users
 def test_viewlistofUsersPage():
     driver = webdriver.Chrome()
@@ -477,5 +499,4 @@ def test_viewlistofUsersPage():
     driver.find_element_by_xpath('//*[@id="login-form"]/div[3]/input').click()
     view = driver.find_element_by_xpath('//*[@id="content-main"]/div[1]/table/tbody/tr[2]/th/a').click()
     assert view == driver.get('http://localhost:8000/admin/auth/user/')
-
 

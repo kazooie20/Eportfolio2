@@ -15,6 +15,9 @@ import os.path
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", __file__)
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "projects",
     "blog",
+    
     
 ]
 
@@ -129,3 +133,5 @@ STATIC_ROOT = ''
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = ( os.path.join('static'), )
+
+#set DJANGO_SETTINGS_MODULE=settings
